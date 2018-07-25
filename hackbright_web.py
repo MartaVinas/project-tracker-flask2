@@ -12,20 +12,40 @@ app.secret_key = "This is a secret."
 @app.route("/student")
 def get_student():
     """Show information about a student."""
-
+    student_github = request.args.get('github')
     # import pdb; pdb.set_trace();
-    if 'new_student' in session:
+
+    # Use if/else statements to determine if a student is already in
+    # the session OR already in the database OR if it is a new student
+    if 'new_student' in session and student_github == session['new_student'][2]:
+        # If the student is already in the session and the github that is input
+        # into the search bar is the same as the one in the session, then we want 
+        # to gather the session information, to be displayed in student_info.html
         github = session['new_student'][2]
 
         first_name, last_name, github = hackbright.get_student_by_github(github)
 
-        html = render_template("student_info.html",
-                       first=first_name,
-                       last=last_name,
-                       github=github)
-        return html
+        project_grades = hackbright.get_grades_by_github(github)
+        # print(project_grades)
+
+    elif student_github in db:
+        # If the student IS NOT in the session, we will check if they are in the
+        # database. If the student is in the database (checked by their github),
+        # then we want to gather the info from the database, to be displayed in 
+        # student_info.html
     else:
+        # If the student is not in the session AND not in the database, we will
+        # send user to the /student-add-form page, where a function will add
+        # the student to the database
         return redirect("/student-add-form")
+    
+    # If student is in session or in database, will render the student_info.html
+    html = render_template("student_info.html",
+                   first=first_name,
+                   last=last_name,
+                   github=github,
+                   projects=project_grades)
+    return html
 
 
 @app.route("/student-search")
