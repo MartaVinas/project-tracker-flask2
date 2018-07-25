@@ -4,7 +4,9 @@
 	<title>Success!</title>
 </head>
 <body>
-	<h2>Congratulations! You have successfully added</h2><br>
+	<h2>Congratulations! You have successfully added {{ first_name }} {{ last_name }}.</h2><br>
 	<a href="/student">Get their student info here!</a>
 </body>
 </html>
+
+<!-- Could use this: {#/student?github={{github}}#}, but less secure -->
