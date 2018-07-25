@@ -33,7 +33,10 @@ def get_student_by_github(github):
 
     row = db_cursor.fetchone()
 
-    print(f"Student: {row[0]} {row[1]}\nGitHub account: {row[2]}")
+    if row:
+        print(f"Student: {row[0]} {row[1]}\nGitHub account: {row[2]}")
+    else:
+        print("Student not found.")
 
     return row
 

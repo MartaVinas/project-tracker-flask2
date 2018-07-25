@@ -13,6 +13,8 @@ app.secret_key = "This is a secret."
 def get_student():
     """Show information about a student."""
     student_github = request.args.get('github')
+    student = hackbright.get_student_by_github(student_github)
+    print(student)
     # import pdb; pdb.set_trace();
 
     # Use if/else statements to determine if a student is already in
@@ -23,16 +25,23 @@ def get_student():
         # to gather the session information, to be displayed in student_info.html
         github = session['new_student'][2]
 
-        first_name, last_name, github = hackbright.get_student_by_github(github)
+        first_name, last_name, github = student
 
         project_grades = hackbright.get_grades_by_github(github)
         # print(project_grades)
 
-    elif student_github in db:
-        # If the student IS NOT in the session, we will check if they are in the
-        # database. If the student is in the database (checked by their github),
-        # then we want to gather the info from the database, to be displayed in 
-        # student_info.html
+    elif student:
+    #     # If the student IS NOT in the session, we will check if they are in the
+    #     # database. If the student is in the database (checked by their github),
+    #     # then we want to gather the info from the database, to be displayed in 
+    #     # student_info.html
+    
+    # If student has been found in the database, do these  things
+
+        first_name, last_name, github = student
+
+        project_grades = hackbright.get_grades_by_github(student_github)
+
     else:
         # If the student is not in the session AND not in the database, we will
         # send user to the /student-add-form page, where a function will add
